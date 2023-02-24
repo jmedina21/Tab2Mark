@@ -1,0 +1,169 @@
+body {
+    margin: 0px;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
+    min-width: 400px;
+    background-color: #fafafa;
+    }
+
+.save-bar-container{
+    display: flex;
+}
+
+input{
+    width: 87.5%;
+    border: 2px solid #1E1E1E;
+    border-radius: 5px;
+    padding: 0.8em 0.9em;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+input::placeholder{
+    font-size: 1.1rem;
+    opacity: 0.5;
+}
+
+.save-btn{
+    width: 40px;
+    margin-left: 2%;
+    cursor: pointer;
+}
+
+.save-btn:hover{
+    margin-left: 1.95%;
+    width: 41px;
+}
+
+.save-btn:active{
+    margin-left: 2.03%;
+    width: 39px;
+}
+
+button{
+    margin: 0.9em 0.7em 0 0.15em;
+    padding: 0 0 0px 0;
+    background-color: #fafafa;
+    border: none;
+    border-bottom: 1px solid #6f6f6f;
+    color: #6F6F6F;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.93rem;
+    cursor: pointer;
+}
+
+.copy-markdown-btn{
+    position: relative;
+}
+
+.copy-tooltip{
+    position: absolute;
+    top: 3.6em;
+    left: 135px;
+    background-color: #000;
+    transform: translateX(-50%);
+    color: #fff;
+    padding: 0.3em 0.6em;
+    border-radius: 7px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.copy-tooltip::before{
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    border: 10px solid;
+    border-color: #000 #0000 #0000 #0000;
+}
+
+ul {
+    width: 87%;
+    margin: 3em auto;
+    line-height: 1.5;
+    max-height: 320px;
+    overflow: auto;
+  }
+
+.li-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li{
+    margin-top: 5px;
+    font-size: 1.1rem;
+}
+
+.ellipsis-text {
+    max-width: 250px; /* Set the max-width */
+    overflow: hidden; /* Hide the text that exceeds the max-width */
+    text-overflow: ellipsis; /* Display the ellipsis */
+    white-space: nowrap; /* Prevent the text from wrapping to a new line */
+  }
+  
+a{
+    cursor: pointer;
+    text-decoration: none;
+    color: #1E1E1E;
+}
+
+li a:hover, li a:focus{
+    text-decoration: underline;
+    color: #819ccf;
+}
+
+.delete-btn{
+    width: 20px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    cursor: pointer;
+    margin-right: 1.5em;
+}
+
+.li-container:hover > .delete-btn{
+    opacity: 1;
+}
+
+footer{
+    display: flex;
+    justify-content: space-between;
+    width: 93%
+}
+
+p{
+    color: #6F6F6F;
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+
+.empingames{
+    border-bottom: 1px solid #6f6f6f;
+}
+
+.bmc-btn{
+    width: 8.5em;
+}
+
+/* Changes the width of the scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  /* Changes the background color of the track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  /* Changes the thumb color and border radius */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(194, 194, 194);
+    border-radius: 10px;
+  }
+  /* Removes the arrows */
+  ::-webkit-scrollbar-button {
+    display: none;
+  } 
