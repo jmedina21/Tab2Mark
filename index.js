@@ -34,7 +34,7 @@ function saveToArray(){
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
         if(noteInput.value){
             noteArray.push({
-                note: noteInput.value,
+                note: encodeHTML(noteInput.value),
                 url: tabs[0].url,
             })
         }else{
@@ -108,3 +108,10 @@ noteInput.focus()
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
 noteInput.placeholder = tabs[0].title
 })
+
+function encodeHTML(text) {
+    let element = document.createElement("div");
+    element.textContent = text;
+
+    return element.innerHTML;
+  }
