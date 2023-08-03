@@ -101,10 +101,10 @@ li{
 }
 
 .ellipsis-text {
-    max-width: 250px; /* Set the max-width */
-    overflow: hidden; /* Hide the text that exceeds the max-width */
-    text-overflow: ellipsis; /* Display the ellipsis */
-    white-space: nowrap; /* Prevent the text from wrapping to a new line */
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   
 a{
@@ -150,20 +150,16 @@ p{
     width: 8.5em;
 }
 
-/* Changes the width of the scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
   }
-  /* Changes the background color of the track */
   ::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
-  /* Changes the thumb color and border radius */
   ::-webkit-scrollbar-thumb {
     background: rgb(194, 194, 194);
     border-radius: 10px;
   }
-  /* Removes the arrows */
   ::-webkit-scrollbar-button {
     display: none;
   } 
