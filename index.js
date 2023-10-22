@@ -117,6 +117,4 @@ function encodeHTML(text) {
     element.textContent = text;
 
     return element.innerHTML;
-  }
-
-  render()
+}
