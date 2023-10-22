@@ -1,0 +1,3 @@
+# Ignore common files
+.DS_Store
+Thumbs.db
