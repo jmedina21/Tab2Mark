@@ -93,7 +93,7 @@ function render(){
         <div class="li-container">
             <li class="img-link">
                 <div class='ellipsis-text'>
-                    <img src="${item.favIconUrl}" class="favicon">
+                    <img src="${item.favIconUrl || "./images/placeholder-favicon.svg"}" class="favicon">
                     <a class="text-link" href="${item.url}" target="_blank">${item.note}</a>
                 </div>
             </li>
