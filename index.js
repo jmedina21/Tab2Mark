@@ -31,14 +31,16 @@ document.addEventListener('click',function(e){
 })
 
 function saveToArray(){
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
         if(noteInput.value){
             noteArray.push({
+                favIconUrl: tabs[0].favIconUrl,
                 note: encodeHTML(noteInput.value),
                 url: tabs[0].url,
             })
         }else{
             noteArray.push({
+                favIconUrl: tabs[0].favIconUrl,
                 note: tabs[0].title,
                 url: tabs[0].url,
             })
@@ -86,16 +88,17 @@ function tooltipStyle(){
 
 function render(){
     let listHtml = ''
-    noteArray.forEach(function(item, index){
+    noteArray.forEach((item, index) => {
         listHtml += `
         <div class="li-container">
-            <li>
+            <li class="img-link">
                 <div class='ellipsis-text'>
-                    <a href="${item.url}" target="_blank">${item.note}</a>
+                    <img src="${item.favIconUrl}" class="favicon">
+                    <a class="text-link" href="${item.url}" target="_blank">${item.note}</a>
                 </div>
             </li>
             <img 
-                src= 'images/delete svg.svg' 
+                src="images/delete svg.svg"
                 class="delete-btn drop-shadow" 
                 data-remove="${index}">
         </div>
@@ -115,3 +118,5 @@ function encodeHTML(text) {
 
     return element.innerHTML;
   }
+
+  render()

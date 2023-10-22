@@ -4,7 +4,7 @@ body {
     font-family: 'Open Sans', sans-serif;
     min-width: 400px;
     background-color: #fafafa;
-    }
+}
 
 .save-bar-container{
     display: flex;
@@ -87,7 +87,11 @@ ul {
     line-height: 1.5;
     max-height: 320px;
     overflow: auto;
-  }
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 
 .li-container{
     display: flex;
@@ -96,7 +100,6 @@ ul {
 }
 
 li{
-    margin-top: 5px;
     font-size: 1.1rem;
 }
 
@@ -105,7 +108,14 @@ li{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
+}
+
+.favicon{
+    width:25px;
+    border-radius: 5px;
+    vertical-align: sub;
+    margin-right: 0.5rem;
+}
   
 a{
     cursor: pointer;
