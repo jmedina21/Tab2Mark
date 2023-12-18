@@ -13,6 +13,36 @@ document.addEventListener('keyup',function(e){
     }
 })
 
+document.getElementById('import-btn').addEventListener('change', importList)
+
+function importList(e) {
+    let file = e.target.files[0];
+    if (!file) {
+        return;
+    }
+
+    let reader = new FileReader();
+    reader.onload = (e) => {
+        let contents = e.target.result;
+        let lines = contents.split('\n');
+        noteArray = lines.map(line => {
+            let matches = line.match(/\-\[([^\]]+)\]\s+\+\s+\[([^\]]+)\]\(([^)]+)\)/);
+            if (matches && matches.length === 4) {
+                return {
+                    favIconUrl: matches[1],
+                    note: matches[2],
+                    url: matches[3]
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+        localStorage.setItem('noteArray', JSON.stringify(noteArray));
+        render();
+    };
+    reader.readAsText(file);
+};
+
 document.addEventListener('click',function(e){
     if(e.target.id === 'save-btn'){
         saveToArray()
@@ -20,8 +50,6 @@ document.addEventListener('click',function(e){
         localStorage.removeItem('noteArray')
         noteArray = []
         render()
-    }else if(e.target.dataset.remove){
-        removeLiItem(e.target.dataset.remove)
     }else if(e.target.id === 'export-btn'){
         exportArray()
     }else if(e.target.id === 'copy-markdown-btn'){
@@ -59,9 +87,9 @@ function removeLiItem(id){
 }
 
 function exportArray(){
-    let exportData =noteArray.map(function(item){
-        return `- [${item.note}]` + `(${item.url})`
-    }).join('\n');
+    let exportData = noteArray.map(function(item){
+        return `-[${item.favIconUrl}] + [${item.note}]` + `(${item.url})`
+    }).join('\n');  
     let blob = new Blob([exportData], {type: "text/markdown;charset=utf-8"})
     saveAs(blob, "Saved Tabs.md")
 }

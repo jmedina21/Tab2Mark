@@ -40,9 +40,15 @@ input::placeholder{
     width: 39px;
 }
 
-button{
-    margin: 0.9em 0.7em 0 0.15em;
-    padding: 0 0 0px 0;
+.buttons{
+    display: flex;
+    align-items: center;
+    margin-top: 0.9rem;
+    gap: 0.5rem;
+}
+
+.btn{
+    padding: 0;
     background-color: #fafafa;
     border: none;
     border-bottom: 1px solid #6f6f6f;
@@ -51,6 +57,14 @@ button{
     font-family: 'Inter', sans-serif;
     font-size: 0.93rem;
     cursor: pointer;
+}
+
+.import-btn-label {
+    cursor: pointer;
+}
+
+.import-btn {
+    display: none;
 }
 
 .copy-markdown-btn{

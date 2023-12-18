@@ -21,10 +21,14 @@
             <input type="text" id="note-input">
             <img src="images/plus-square-Filled.svg" id="save-btn" class="save-btn">
         </div>
-        <button id="export-btn" class="export-btn">Export</button>
-        <button id="copy-markdown-btn" class="copy-markdown-btn">Copy Markdown</button>
-        <div id='copy-tooltip' class="copy-tooltip">Copied</div>
-        <button id="clear-btn" class="clear-btn">Clear</button>
+        <div class="buttons">
+            <button id="export-btn" class="export-btn btn">Export</button>
+            <label for="import-btn" class="import-btn-label btn">Import</label>
+            <input type="file" id="import-btn" class="import-btn btn" accept=".md">
+            <button id="copy-markdown-btn" class="copy-markdown-btn btn">Copy Markdown</button>
+            <div id='copy-tooltip' class="copy-tooltip btn">Copied</div>
+            <button id="clear-btn" class="clear-btn btn">Clear</button>
+        </div>
     </div>
     <ul id='ul-el'></ul>
     <footer>
