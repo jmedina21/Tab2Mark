@@ -55,6 +55,8 @@ document.addEventListener('click',function(e){
     }else if(e.target.id === 'copy-markdown-btn'){
         copyToClipboard()
         tooltipStyle()
+    }else if(e.target.dataset.remove){
+        removeLiItem(e.target.dataset.remove)
     }
 })
 
