@@ -1,10 +1,15 @@
 const noteInput = document.getElementById('note-input')
 const ulEL = document.getElementById('ul-el')
+const listNameInput = document.getElementById('list-name')
 let noteArray = []
+let curretList = 0
+
+if(localStorage.getItem('curretList')){
+    curretList = JSON.parse(localStorage.getItem('curretList'))
+}
 
 if(localStorage.getItem('noteArray')){
     noteArray = JSON.parse(localStorage.getItem('noteArray'))
-    render()
 }
 
 document.addEventListener('keyup',function(e){
@@ -13,7 +18,38 @@ document.addEventListener('keyup',function(e){
     }
 })
 
-document.getElementById('import-btn').addEventListener('change', importList)
+document.addEventListener('click',function(e){
+    if(e.target.id === 'save-btn'){
+        saveToArray()
+    }else if(e.target.id === 'right-btn'){
+        curretList++
+        if(curretList > noteArray.length - 1){
+            curretList = 0
+        }
+        localStorage.setItem('curretList', JSON.stringify(curretList))
+        render()
+    }else if(e.target.id === 'left-btn'){
+        curretList--
+        if(curretList < 0){
+            curretList = noteArray.length - 1
+        }
+        localStorage.setItem('curretList', JSON.stringify(curretList))
+        render()
+    }else if(e.target.id === 'clear-btn'){
+        localStorage.removeItem('noteArray')
+        noteArray = []
+        render()
+    }else if(e.target.id === 'export-btn'){
+        exportArray()
+    }else if(e.target.id === 'copy-markdown-btn'){
+        copyToClipboard()
+        tooltipStyle()
+    }else if(e.target.dataset.remove){
+        removeLiItem(e.target.dataset.remove)
+    }
+})
+
+// document.getElementById('import-btn').addEventListener('change', importList)
 
 function importList(e) {
     let file = e.target.files[0];
@@ -43,33 +79,16 @@ function importList(e) {
     reader.readAsText(file);
 };
 
-document.addEventListener('click',function(e){
-    if(e.target.id === 'save-btn'){
-        saveToArray()
-    }else if(e.target.id === 'clear-btn'){
-        localStorage.removeItem('noteArray')
-        noteArray = []
-        render()
-    }else if(e.target.id === 'export-btn'){
-        exportArray()
-    }else if(e.target.id === 'copy-markdown-btn'){
-        copyToClipboard()
-        tooltipStyle()
-    }else if(e.target.dataset.remove){
-        removeLiItem(e.target.dataset.remove)
-    }
-})
-
 function saveToArray(){
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
         if(noteInput.value){
-            noteArray.push({
+            noteArray[curretList].push({
                 favIconUrl: tabs[0].favIconUrl,
                 note: encodeHTML(noteInput.value),
                 url: tabs[0].url,
             })
         }else{
-            noteArray.push({
+            noteArray[curretList].push({
                 favIconUrl: tabs[0].favIconUrl,
                 note: tabs[0].title,
                 url: tabs[0].url,
@@ -117,8 +136,9 @@ function tooltipStyle(){
 }
 
 function render(){
+    listNameInput.value = noteArray[curretList].listName
     let listHtml = ''
-    noteArray.forEach((item, index) => {
+    noteArray[curretList].links.forEach((item, index) => {
         listHtml += `
         <div class="li-container">
             <li class="img-link">
@@ -138,13 +158,14 @@ function render(){
 }
 
 noteInput.focus()
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-noteInput.placeholder = tabs[0].title
-})
+// chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+// noteInput.placeholder = tabs[0].title
+// })
 
 function encodeHTML(text) {
     let element = document.createElement("div");
     element.textContent = text;
-
     return element.innerHTML;
 }
+
+render()
