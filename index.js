@@ -37,9 +37,6 @@ document.addEventListener('change',function(e){
     }if(e.target.id ==='import-btn'){
         importMultipleLists(e)
         document.getElementById('import-btn').value = ''
-    }if(e.target.id === 'import-all-btn'){
-        importMultipleLists(e)
-        document.getElementById('import-all-btn').value = ''
     }
 })
 
