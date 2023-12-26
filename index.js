@@ -48,19 +48,27 @@ document.addEventListener('click',function(e){
     if(e.target.id === 'save-btn'){
         saveToArray()
     }else if(e.target.id === 'right-btn'){
-        currentList++
-        if(currentList > noteArray.length - 1){
-            currentList = 0
+        if(noteArray.length === 1){
+            tooltipStyle('list')
+        }else{
+            currentList++
+            if(currentList > noteArray.length - 1){
+                currentList = 0
+            }
+            localStorage.setItem('currentList', JSON.stringify(currentList))
+            render()
         }
-        localStorage.setItem('currentList', JSON.stringify(currentList))
-        render()
     }else if(e.target.id === 'left-btn'){
-        currentList--
-        if(currentList < 0){
-            currentList = noteArray.length - 1
+        if(noteArray.length === 1){
+            tooltipStyle('list')
+        }else{
+            currentList--
+            if(currentList < 0){
+                currentList = noteArray.length - 1
+            }
+            localStorage.setItem('currentList', JSON.stringify(currentList))
+            render()
         }
-        localStorage.setItem('currentList', JSON.stringify(currentList))
-        render()
     }else if(e.target.id === 'options-btn'){
         if(!isOptionsOpen){
             openModal()
@@ -109,7 +117,7 @@ document.addEventListener('click',function(e){
         render()
     }else if(e.target.id === 'copy-markdown-btn'){
         copyToClipboard()
-        tooltipStyle()
+        tooltipStyle('copy')
     }else if(e.target.dataset.remove){
         removeLiItem(e.target.dataset.remove)
     }
@@ -230,8 +238,8 @@ function copyToClipboard(){
     navigator.clipboard.writeText(exportArray.join('\n'))
 }
 
-function tooltipStyle(){
-    const tooltip = document.getElementById('copy-tooltip');
+function tooltipStyle(action){
+    const tooltip = document.getElementById(`${action}-tooltip`);
     tooltip.style.visibility = 'visible';
     tooltip.style.opacity = 1;
     setTimeout(function(){

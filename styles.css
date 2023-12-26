@@ -88,10 +88,10 @@ input::placeholder{
     cursor: pointer;
 }
 
-/* .copy-tooltip{
+.copy-tooltip{
     position: absolute;
     top: 3.6em;
-    left: 135px;
+    right: 35px;
     background-color: #000;
     transform: translateX(-50%);
     color: #fff;
@@ -100,9 +100,9 @@ input::placeholder{
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s;
-} */
+}
 
-/* .copy-tooltip::before{
+.copy-tooltip::before{
     content: "";
     position: absolute;
     left: 50%;
@@ -110,7 +110,31 @@ input::placeholder{
     transform: translateX(-50%);
     border: 10px solid;
     border-color: #000 #0000 #0000 #0000;
-} */
+}
+
+.list-tooltip{
+    position: absolute;
+    top: 3.6em;
+    left: 162px;
+    background-color: #000;
+    transform: translateX(-50%);
+    color: #fff;
+    padding: 0.3em 0.6em;
+    border-radius: 7px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.list-tooltip::before{
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    border: 10px solid;
+    border-color: #000 #0000 #0000 #0000;
+}
 
 .links-ul {
     width: 87%;
