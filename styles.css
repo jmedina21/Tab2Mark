@@ -230,3 +230,11 @@ p{
     font-size: 1.25rem; 
     cursor: pointer;
   }
+  
+.import-btn-label {
+    cursor: pointer;
+}
+
+.import-btn {
+    display: none;
+}

@@ -59,12 +59,22 @@ document.addEventListener('click',function(e){
             modal.style.display = 'none'
         }
         isOptionsOpen = !isOptionsOpen
-    }else if(e.target.id === 'clear-btn'){
+    }else if(e.target.id === 'new-list'){
+        noteArray.push({
+            listName: 'New List',
+            links: []
+        })
+        currentList = noteArray.length - 1
+        localStorage.setItem('currentList', JSON.stringify(currentList))
+        localStorage.setItem('noteArray', JSON.stringify(noteArray))
+        render()
+    }else if(e.target.id === 'export-list'){
+        exportArray()        
+    }
+    else if(e.target.id === 'clear-btn'){
         localStorage.removeItem('noteArray')
         noteArray = []
         render()
-    }else if(e.target.id === 'export-btn'){
-        exportArray()
     }else if(e.target.id === 'copy-markdown-btn'){
         copyToClipboard()
         tooltipStyle()
@@ -73,7 +83,7 @@ document.addEventListener('click',function(e){
     }
 })
 
-// document.getElementById('import-btn').addEventListener('change', importList)
+document.getElementById('import-list').addEventListener('change', importList)
 
 function importList(e, listName = 'Imported List') {
     let file = e.target.files[0];
@@ -101,9 +111,14 @@ function importList(e, listName = 'Imported List') {
             listName: listName,
             links: links
         };
+        optionsBtn.src = './images/DotsThreeCircleVertical.svg'
+        linksList.style.display = 'block'
+        modal.style.display = 'none'
 
         noteArray.push(newList);
+        currentList = noteArray.length - 1;
         localStorage.setItem('noteArray', JSON.stringify(noteArray));
+        localStorage.setItem('currentList', JSON.stringify(currentList));
 
         render();
     };
