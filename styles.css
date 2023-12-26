@@ -159,19 +159,12 @@ input::placeholder{
 }
 
 .ellipsis-text {
-    max-width: 250px;
+    max-width: 270px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.favicon{
-    width:25px;
-    border-radius: 5px;
-    vertical-align: sub;
-    margin-right: 0.5rem;
-}
-  
 a{
     cursor: pointer;
     text-decoration: none;

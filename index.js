@@ -35,7 +35,7 @@ document.addEventListener('change',function(e){
         noteArray[currentList].listName = listNameInput.value
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
     }if(e.target.id ==='import-btn'){
-        importList(e)
+        importMultipleLists(e)
         document.getElementById('import-btn').value = ''
     }if(e.target.id === 'import-all-btn'){
         importMultipleLists(e)
@@ -155,55 +155,15 @@ function openModal() {
     isOptionsOpen = !isOptionsOpen;
 }
 
-function importList(e, listName = 'Imported List') {
-    let file = e.target.files[0];
-    if (!file) {
-        return;
-    }
-
-    let reader = new FileReader();
-    reader.onload = (e) => {
-        let contents = e.target.result;
-        let lines = contents.split('\n');
-        let links = lines.map(line => {
-            let matches = line.match(/\-\[([^\]]+)\]\(([^)]+)\)\s+\+\s+\[([^\]]+)\]/);
-            if (matches && matches.length === 4) {
-                return {
-                    note: matches[1],
-                    url: matches[2],
-                    favIconUrl: matches[3]
-                };
-            }
-            return null;
-        }).filter(item => item !== null);
-
-        let newList = {
-            listName: listName,
-            links: links
-        };
-        closeModal();
-        noteArray.push(newList);
-        currentList = noteArray.length - 1;
-        localStorage.setItem('noteArray', JSON.stringify(noteArray));
-        localStorage.setItem('currentList', JSON.stringify(currentList));
-
-        render();
-    };
-    reader.readAsText(file);
-};
-
-
 function saveToArray(){
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
         if(noteInput.value){
             noteArray[currentList].links.push({
-                favIconUrl: tabs[0].favIconUrl,
                 note: encodeHTML(noteInput.value),
                 url: tabs[0].url,
             })
         }else{
             noteArray[currentList].links.push({
-                favIconUrl: tabs[0].favIconUrl,
                 note: tabs[0].title,
                 url: tabs[0].url,
             })
@@ -224,7 +184,7 @@ function removeLiItem(id){
 function exportArray() {
     const heading = `# ${noteArray[currentList].listName}\n\n`;
     let exportData = heading + noteArray[currentList].links.map(function(item) {
-        return `-[${item.note}](${item.url}) + [${item.favIconUrl}]`;
+        return `-[${item.note}](${item.url})`;
     }).join('\n');
 
     let blob = new Blob([exportData], {type: "text/markdown;charset=utf-8"});
@@ -237,7 +197,7 @@ function exportAllLists() {
     noteArray.forEach(list => {
         const heading = `# ${list.listName}\n\n`;
         const linksMarkdown = list.links.map(item => {
-            return `-[${item.note}](${item.url}) + [${item.favIconUrl}]`;
+            return `-[${item.note}](${item.url})`;
         }).join('\n');
         
         exportData += heading + linksMarkdown + '\n\n';
@@ -263,13 +223,13 @@ function importMultipleLists(e) {
             let lines = section.trim().split('\n');
             if (lines.length > 0) {
                 const listName = lines[0].replace(/^# /, '');
+
                 const links = lines.slice(1).map(line => {
-                    const matches = line.match(/\-\[([^\]]+)\]\(([^)]+)\)\s+\+\s+\[([^\]]+)\]/);
-                    if (matches && matches.length === 4) {
+                    let matches = line.match(/\-\[(.*?)\]\((.*?)\)/);
+                    if (matches && matches.length === 3) {
                         return {
                             note: matches[1],
-                            url: matches[2],
-                            favIconUrl: matches[3]
+                            url: matches[2]
                         };
                     }
                     return null;
@@ -284,15 +244,17 @@ function importMultipleLists(e) {
 
         currentList = noteArray.length - 1;
         noteArray = noteArray.concat(allLists);
-        currentList ++;
+        currentList++;
         localStorage.setItem('noteArray', JSON.stringify(noteArray));
         localStorage.setItem('currentList', JSON.stringify(currentList));
+
         closeModal();
         render();
     };
 
     reader.readAsText(file);
 }
+
 
 
 function copyToClipboard(){
@@ -323,7 +285,6 @@ function render(){
         <div class="li-container">
             <li class="img-link">
                 <div class='ellipsis-text'>
-                    <img src="${item.favIconUrl || "./images/placeholder-favicon.svg"}" class="favicon">
                     <a class="text-link" href="${item.url}" target="_blank">${item.note}</a>
                 </div>
             </li>
