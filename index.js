@@ -1,11 +1,14 @@
 const noteInput = document.getElementById('note-input')
-const ulEL = document.getElementById('ul-el')
+const linksList = document.getElementById('links-ul')
 const listNameInput = document.getElementById('list-name')
+const modal = document.getElementById('modal')
+const optionsBtn = document.getElementById('options-btn')
 let currentList = 0
 let noteArray = [{
     listName: 'New List',
     links: []
 }]
+let isOptionsOpen = false
 
 if(localStorage.getItem('currentList')){
     currentList = JSON.parse(localStorage.getItem('currentList'))
@@ -17,7 +20,6 @@ if(localStorage.getItem('noteArray')){
 
 document.addEventListener('change',function(e){
     if(e.target.id === 'list-name'){
-        console.log(e.target.value)
         noteArray[currentList].listName = listNameInput.value
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
     }
@@ -46,6 +48,17 @@ document.addEventListener('click',function(e){
         }
         localStorage.setItem('currentList', JSON.stringify(currentList))
         render()
+    }else if(e.target.id === 'options-btn'){
+        if(!isOptionsOpen){
+            optionsBtn.src = './images/XCircle.svg'
+            linksList.style.display = 'none'
+            modal.style.display = 'block'
+        }else{
+            optionsBtn.src = './images/DotsThreeCircleVertical.svg'
+            linksList.style.display = 'block'
+            modal.style.display = 'none'
+        }
+        isOptionsOpen = !isOptionsOpen
     }else if(e.target.id === 'clear-btn'){
         localStorage.removeItem('noteArray')
         noteArray = []
@@ -169,13 +182,13 @@ function render(){
                 </div>
             </li>
             <img 
-                src="images/delete svg.svg"
+                src="./images/MinusCircle.svg"
                 class="delete-btn drop-shadow" 
                 data-remove="${index}">
         </div>
         `
     })
-    ulEL.innerHTML = listHtml
+    linksList.innerHTML = listHtml
 }
 
 noteInput.focus()
