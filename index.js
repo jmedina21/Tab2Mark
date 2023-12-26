@@ -50,13 +50,9 @@ document.addEventListener('click',function(e){
         render()
     }else if(e.target.id === 'options-btn'){
         if(!isOptionsOpen){
-            optionsBtn.src = './images/XCircle.svg'
-            linksList.style.display = 'none'
-            modal.style.display = 'block'
+            openModal()
         }else{
-            optionsBtn.src = './images/DotsThreeCircleVertical.svg'
-            linksList.style.display = 'block'
-            modal.style.display = 'none'
+            closeModal()
         }
         isOptionsOpen = !isOptionsOpen
     }else if(e.target.id === 'new-list'){
@@ -70,6 +66,13 @@ document.addEventListener('click',function(e){
         render()
     }else if(e.target.id === 'export-list'){
         exportArray()        
+    }else if(e.target.id === 'delete-list'){
+        noteArray.splice(currentList, 1)
+        localStorage.setItem('noteArray', JSON.stringify(noteArray))
+        currentList = 0
+        localStorage.setItem('currentList', JSON.stringify(currentList))
+        closeModal();
+        render()
     }
     else if(e.target.id === 'clear-btn'){
         localStorage.removeItem('noteArray')
@@ -84,6 +87,18 @@ document.addEventListener('click',function(e){
 })
 
 document.getElementById('import-list').addEventListener('change', importList)
+
+function closeModal() {
+    optionsBtn.src = './images/DotsThreeCircleVertical.svg';
+    linksList.style.display = 'block';
+    modal.style.display = 'none';
+}
+
+function openModal() {
+    optionsBtn.src = './images/XCircle.svg';
+    linksList.style.display = 'none';
+    modal.style.display = 'block';
+}
 
 function importList(e, listName = 'Imported List') {
     let file = e.target.files[0];
@@ -111,9 +126,7 @@ function importList(e, listName = 'Imported List') {
             listName: listName,
             links: links
         };
-        optionsBtn.src = './images/DotsThreeCircleVertical.svg'
-        linksList.style.display = 'block'
-        modal.style.display = 'none'
+        closeModal();
 
         noteArray.push(newList);
         currentList = noteArray.length - 1;
