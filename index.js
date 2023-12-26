@@ -1,8 +1,11 @@
 const noteInput = document.getElementById('note-input')
 const ulEL = document.getElementById('ul-el')
 const listNameInput = document.getElementById('list-name')
-let noteArray = []
 let currentList = 0
+let noteArray = [{
+    listName: 'New List',
+    links: []
+}]
 
 if(localStorage.getItem('currentList')){
     currentList = JSON.parse(localStorage.getItem('currentList'))
@@ -11,6 +14,14 @@ if(localStorage.getItem('currentList')){
 if(localStorage.getItem('noteArray')){
     noteArray = JSON.parse(localStorage.getItem('noteArray'))
 }
+
+document.addEventListener('change',function(e){
+    if(e.target.id === 'list-name'){
+        console.log(e.target.value)
+        noteArray[currentList].listName = listNameInput.value
+        localStorage.setItem('noteArray', JSON.stringify(noteArray))
+    }
+})
 
 document.addEventListener('keyup',function(e){
     if(e.key === 'Enter'){
@@ -168,9 +179,9 @@ function render(){
 }
 
 noteInput.focus()
-// chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-// noteInput.placeholder = tabs[0].title
-// })
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+noteInput.placeholder = tabs[0].title
+})
 
 function encodeHTML(text) {
     let element = document.createElement("div");
