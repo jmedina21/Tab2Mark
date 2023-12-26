@@ -16,15 +16,14 @@ if(localStorage.getItem('currentList')){
 
 if(localStorage.getItem('noteArray')){
     noteArray = JSON.parse(localStorage.getItem('noteArray'))
-}
-
-if (!noteArray[0].hasOwnProperty('listName') && !noteArray[0].hasOwnProperty('links')) {
-    let updatedArray = [{
-        listName: "My List",
-        links: noteArray
-    }];
-    noteArray = updatedArray;
-    localStorage.setItem('noteArray', JSON.stringify(noteArray));
+    if (!noteArray[0].hasOwnProperty('listName') && !noteArray[0].hasOwnProperty('links')) {
+        let updatedArray = [{
+            listName: "My List",
+            links: noteArray
+        }];
+        noteArray = updatedArray;
+        localStorage.setItem('noteArray', JSON.stringify(noteArray));
+    }
 }
 
 if(localStorage.getItem('noteArray')){
@@ -35,6 +34,12 @@ document.addEventListener('change',function(e){
     if(e.target.id === 'list-name'){
         noteArray[currentList].listName = listNameInput.value
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
+    }if(e.target.id ==='import-btn'){
+        importList(e)
+        document.getElementById('import-btn').value = ''
+    }if(e.target.id === 'import-all-btn'){
+        importMultipleLists(e)
+        document.getElementById('import-all-btn').value = ''
     }
 })
 
@@ -47,7 +52,7 @@ document.addEventListener('keyup',function(e){
 document.addEventListener('click',function(e){
     if(e.target.id === 'save-btn'){
         saveToArray()
-    }else if(e.target.id === 'right-btn'){
+    }if(e.target.id === 'right-btn'){
         if(noteArray.length === 1){
             tooltipStyle('list')
         }else{
@@ -58,7 +63,7 @@ document.addEventListener('click',function(e){
             localStorage.setItem('currentList', JSON.stringify(currentList))
             render()
         }
-    }else if(e.target.id === 'left-btn'){
+    }if(e.target.id === 'left-btn'){
         if(noteArray.length === 1){
             tooltipStyle('list')
         }else{
@@ -69,14 +74,13 @@ document.addEventListener('click',function(e){
             localStorage.setItem('currentList', JSON.stringify(currentList))
             render()
         }
-    }else if(e.target.id === 'options-btn'){
+    }if(e.target.id === 'options-btn'){
         if(!isOptionsOpen){
             openModal()
         }else{
             closeModal()
         }
-        isOptionsOpen = !isOptionsOpen
-    }else if(e.target.id === 'new-list'){
+    }if(e.target.id === 'new-list'){
         noteArray.push({
             listName: 'New List',
             links: []
@@ -86,55 +90,69 @@ document.addEventListener('click',function(e){
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
         closeModal();
         render()
-    }else if(e.target.id === 'export-list'){
+    }if(e.target.id === 'export-list'){
         exportArray()        
-    }else if(e.target.id === 'delete-list'){
+    }if(e.target.id === 'delete-list'){
         noteArray.splice(currentList, 1)
-        localStorage.setItem('noteArray', JSON.stringify(noteArray))
-        currentList--
-        if(currentList < 0){
-            currentList = noteArray.length - 1
+        if(noteArray.length === 0){
+            noteArray = [{
+                listName: 'New List',
+                links: []
+            }]
+            currentList = 0
+            localStorage.setItem('noteArray', JSON.stringify(noteArray))
+            localStorage.setItem('currentList', JSON.stringify(currentList))
+        }else {
+            currentList --
+            if(currentList < 0){
+                currentList = noteArray.length - 1
+            }
+            localStorage.setItem('noteArray', JSON.stringify(noteArray))
+            localStorage.setItem('currentList', JSON.stringify(currentList))
         }
-        localStorage.setItem('currentList', JSON.stringify(currentList))
         closeModal();
         render()
-    }else if(e.target.id === 'export-lists'){
+    }if(e.target.id === 'export-lists'){
         exportAllLists()
-    }else if(e.target.id === 'delete-all-lists'){
-        localStorage.removeItem('noteArray')
-        localStorage.removeItem('currentList')
+    }if(e.target.id === 'delete-all-lists'){
+        document.getElementById('confirm-dialog').showModal()
+    }if(e.target.id === 'confirm-btn'){
         noteArray = [{
             listName: 'New List',
             links: []
         }]
         currentList = 0
+        localStorage.setItem('noteArray', JSON.stringify(noteArray))
+        localStorage.setItem('currentList', JSON.stringify(currentList))
+        document.getElementById('confirm-dialog').close()
         closeModal();
         render()
-    }
-    else if(e.target.id === 'clear-btn'){
+    }else if(e.target.id === 'cancel-btn'){
+        document.getElementById('confirm-dialog').close()
+    }if(e.target.id === 'clear-btn'){
         localStorage.removeItem('noteArray')
         noteArray = []
         render()
-    }else if(e.target.id === 'copy-markdown-btn'){
+    }if(e.target.id === 'copy-markdown-btn'){
         copyToClipboard()
         tooltipStyle('copy')
-    }else if(e.target.dataset.remove){
+    }if(e.target.dataset.remove){
         removeLiItem(e.target.dataset.remove)
     }
 })
-
-document.getElementById('import-list').addEventListener('change', importList)
 
 function closeModal() {
     optionsBtn.src = './images/DotsThreeCircleVertical.svg';
     linksList.style.display = 'block';
     modal.style.display = 'none';
+    isOptionsOpen = !isOptionsOpen;
 }
 
 function openModal() {
     optionsBtn.src = './images/XCircle.svg';
     linksList.style.display = 'none';
     modal.style.display = 'block';
+    isOptionsOpen = !isOptionsOpen;
 }
 
 function importList(e, listName = 'Imported List') {
@@ -164,7 +182,6 @@ function importList(e, listName = 'Imported List') {
             links: links
         };
         closeModal();
-
         noteArray.push(newList);
         currentList = noteArray.length - 1;
         localStorage.setItem('noteArray', JSON.stringify(noteArray));
@@ -230,6 +247,53 @@ function exportAllLists() {
     saveAs(blob, "Saved Tabs.md");
 }
 
+function importMultipleLists(e) {
+    let file = e.target.files[0];
+    if (!file) {
+        return;
+    }
+
+    let reader = new FileReader();
+    reader.onload = (e) => {
+        const contents = e.target.result;
+        const listSections = contents.split(/(?=# )/);
+        let allLists = [];
+
+        listSections.forEach(section => {
+            let lines = section.trim().split('\n');
+            if (lines.length > 0) {
+                const listName = lines[0].replace(/^# /, '');
+                const links = lines.slice(1).map(line => {
+                    const matches = line.match(/\-\[([^\]]+)\]\(([^)]+)\)\s+\+\s+\[([^\]]+)\]/);
+                    if (matches && matches.length === 4) {
+                        return {
+                            note: matches[1],
+                            url: matches[2],
+                            favIconUrl: matches[3]
+                        };
+                    }
+                    return null;
+                }).filter(item => item !== null);
+
+                allLists.push({
+                    listName: listName,
+                    links: links
+                });
+            }
+        });
+
+        currentList = noteArray.length - 1;
+        noteArray = noteArray.concat(allLists);
+        currentList ++;
+        localStorage.setItem('noteArray', JSON.stringify(noteArray));
+        localStorage.setItem('currentList', JSON.stringify(currentList));
+        closeModal();
+        render();
+    };
+
+    reader.readAsText(file);
+}
+
 
 function copyToClipboard(){
     let exportArray =noteArray[currentList].links.map(function(item){
@@ -274,8 +338,9 @@ function render(){
 }
 
 noteInput.focus()
+
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-noteInput.placeholder = tabs[0].title
+    noteInput.placeholder = tabs[0].title
 })
 
 function encodeHTML(text) {

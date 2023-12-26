@@ -262,3 +262,13 @@ p{
 .import-btn {
     display: none;
 }
+
+.warn-msg{
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: black;
+}
+
+.confirm-dialog::backdrop {
+    background-color: hsla(0, 0%, 0%, 0.335);
+  }

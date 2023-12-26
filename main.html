@@ -45,9 +45,21 @@
                 <li id="new-list">New List</li>
                 <li id="delete-list">Delete List</li>
                 <li id="export-lists">Export All</li>
+                <li id="import-multiple-list">
+                    <label for="import-all-btn" class="import-btn-label btn">Import Multiple</label>
+                    <input type="file" id="import-all-btn" class="import-btn btn" accept=".md">
+                </li>
                 <li id="delete-all-lists">Delete All</li>
             </ul>
         </div>
+        <dialog id="confirm-dialog" class="confirm-dialog">
+            <div class="confirmation-modal">
+                <p class="warn-msg">Are you sure you want to delete all the lists?</p>
+                <div class="confirmation-btns">
+                    <button id="cancel-btn" class="cancel-btn btn">Cancel</button>
+                    <button id="confirm-btn" class="confirm-btn btn">Confirm</button>
+                </div>
+        </dialog>
     </div>
     <ul id='links-ul' class="links-ul"></ul>
     <footer>
