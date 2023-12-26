@@ -40,19 +40,24 @@ input::placeholder{
     width: 39px;
 }
 
+.options-container{
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    width: 87.5%;
+}
+
 .list-selector{
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 0.5rem;
-
-}
-
-.right-btn{
-    width: 2rem;
 }
 
 .left-btn{
+    width: 2rem;
+}
+
+.right-btn{
     width: 2rem;
     transform: rotate(180deg);
 }
@@ -65,10 +70,18 @@ input::placeholder{
     padding: 0.2rem 1rem;
     border-radius: 20px;
     border: none;
-    width: 180px;
+    width: 210px;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.save-list{
+    width: 1.55rem;
+}
+
+.options-btn{
+    width: 1.6rem;
 }
 
 /* .copy-tooltip{
