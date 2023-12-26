@@ -18,6 +18,19 @@ if(localStorage.getItem('noteArray')){
     noteArray = JSON.parse(localStorage.getItem('noteArray'))
 }
 
+if (!noteArray[0].hasOwnProperty('listName') && !noteArray[0].hasOwnProperty('links')) {
+    let updatedArray = [{
+        listName: "My List",
+        links: noteArray
+    }];
+    noteArray = updatedArray;
+    localStorage.setItem('noteArray', JSON.stringify(noteArray));
+}
+
+if(localStorage.getItem('noteArray')){
+    noteArray = JSON.parse(localStorage.getItem('noteArray'))
+}
+
 document.addEventListener('change',function(e){
     if(e.target.id === 'list-name'){
         noteArray[currentList].listName = listNameInput.value
@@ -63,6 +76,7 @@ document.addEventListener('click',function(e){
         currentList = noteArray.length - 1
         localStorage.setItem('currentList', JSON.stringify(currentList))
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
+        closeModal();
         render()
     }else if(e.target.id === 'export-list'){
         exportArray()        
