@@ -69,8 +69,23 @@ document.addEventListener('click',function(e){
     }else if(e.target.id === 'delete-list'){
         noteArray.splice(currentList, 1)
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
-        currentList = 0
+        currentList--
+        if(currentList < 0){
+            currentList = noteArray.length - 1
+        }
         localStorage.setItem('currentList', JSON.stringify(currentList))
+        closeModal();
+        render()
+    }else if(e.target.id === 'export-lists'){
+        exportAllLists()
+    }else if(e.target.id === 'delete-all-lists'){
+        localStorage.removeItem('noteArray')
+        localStorage.removeItem('currentList')
+        noteArray = [{
+            listName: 'New List',
+            links: []
+        }]
+        currentList = 0
         closeModal();
         render()
     }
@@ -111,12 +126,12 @@ function importList(e, listName = 'Imported List') {
         let contents = e.target.result;
         let lines = contents.split('\n');
         let links = lines.map(line => {
-            let matches = line.match(/\-\[([^\]]+)\]\s+\+\s+\[([^\]]+)\]\(([^)]+)\)/);
+            let matches = line.match(/\-\[([^\]]+)\]\(([^)]+)\)\s+\+\s+\[([^\]]+)\]/);
             if (matches && matches.length === 4) {
                 return {
-                    favIconUrl: matches[1],
-                    note: matches[2],
-                    url: matches[3]
+                    note: matches[1],
+                    url: matches[2],
+                    favIconUrl: matches[3]
                 };
             }
             return null;
@@ -137,6 +152,7 @@ function importList(e, listName = 'Imported List') {
     };
     reader.readAsText(file);
 };
+
 
 function saveToArray(){
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
@@ -169,8 +185,24 @@ function removeLiItem(id){
 function exportArray() {
     const heading = `# ${noteArray[currentList].listName}\n\n`;
     let exportData = heading + noteArray[currentList].links.map(function(item) {
-        return `-[${item.favIconUrl}] + [${item.note}](${item.url})`;
+        return `-[${item.note}](${item.url}) + [${item.favIconUrl}]`;
     }).join('\n');
+
+    let blob = new Blob([exportData], {type: "text/markdown;charset=utf-8"});
+    saveAs(blob, "Saved Tabs.md");
+}
+
+function exportAllLists() {
+    let exportData = "";
+
+    noteArray.forEach(list => {
+        const heading = `# ${list.listName}\n\n`;
+        const linksMarkdown = list.links.map(item => {
+            return `-[${item.note}](${item.url}) + [${item.favIconUrl}]`;
+        }).join('\n');
+        
+        exportData += heading + linksMarkdown + '\n\n';
+    });
 
     let blob = new Blob([exportData], {type: "text/markdown;charset=utf-8"});
     saveAs(blob, "Saved Tabs.md");
