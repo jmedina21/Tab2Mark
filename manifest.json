@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "version": "3.0.1",
+    "version": "3.0.2",
     "name": "Tab2Mark",
     "action": {
         "default_popup": "main.html",

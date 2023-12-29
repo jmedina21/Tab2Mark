@@ -40,11 +40,19 @@ document.addEventListener('change',function(e){
     }
 })
 
-document.addEventListener('keyup',function(e){
-    if(e.key === 'Enter'){
-        saveToArray()
+listNameInput.addEventListener('focus', function(e) {
+    e.target.select();
+});
+
+document.addEventListener('keyup', function(e) {
+    if (e.key === 'Enter') {
+        if (document.activeElement === listNameInput) {
+            listNameInput.blur();
+        } else {
+            saveToArray();
+        }
     }
-})
+});
 
 document.addEventListener('click',function(e){
     if(e.target.id === 'save-btn'){
@@ -83,6 +91,7 @@ document.addEventListener('click',function(e){
             links: []
         })
         currentList = noteArray.length - 1
+        listNameInput.focus()
         localStorage.setItem('currentList', JSON.stringify(currentList))
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
         closeModal();
