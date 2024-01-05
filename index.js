@@ -92,6 +92,7 @@ document.addEventListener('click',function(e){
         })
         currentList = noteArray.length - 1
         listNameInput.focus()
+        e.target.select()    
         localStorage.setItem('currentList', JSON.stringify(currentList))
         localStorage.setItem('noteArray', JSON.stringify(noteArray))
         closeModal();
