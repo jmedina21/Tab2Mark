@@ -262,8 +262,6 @@ function importMultipleLists(e) {
     reader.readAsText(file);
 }
 
-
-
 function copyToClipboard(){
     let exportArray =noteArray[currentList].links.map(function(item){
         return `- [${item.note}]` + `(${item.url})`
