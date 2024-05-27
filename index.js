@@ -9,6 +9,7 @@ let noteArray = [{
     links: []
 }]
 let isOptionsOpen = false
+let isTabEmpty = false;
 
 if(localStorage.getItem('currentList')){
     currentList = JSON.parse(localStorage.getItem('currentList'))
@@ -28,6 +29,18 @@ if(localStorage.getItem('noteArray')){
 
 if(localStorage.getItem('noteArray')){
     noteArray = JSON.parse(localStorage.getItem('noteArray'))
+}
+
+function checkIfTabIsEmpty() {
+    return new Promise((resolve) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+            if (tabs[0].url === 'chrome://newtab/') {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
 }
 
 document.addEventListener('change',function(e){
@@ -162,7 +175,9 @@ function openModal() {
     isOptionsOpen = !isOptionsOpen;
 }
 
-function saveToArray(){
+async function saveToArray(){
+    isTabEmpty = await checkIfTabIsEmpty();
+    if (isTabEmpty) return;
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
         if(noteInput.value){
             noteArray[currentList].links.push({
@@ -281,16 +296,17 @@ function tooltipStyle(action){
     tooltip.style.visibility = 'hidden';
     }, 2000);
 }
+async function render() {
+    listNameInput.value = noteArray[currentList].listName;
+    let listHtml = '';
+    let isTabEmpty = await checkIfTabIsEmpty();
 
-function render(){
-    listNameInput.value = noteArray[currentList].listName
-    let listHtml = ''
     noteArray[currentList].links.forEach((item, index) => {
         listHtml += `
         <div class="li-container">
             <li class="img-link">
                 <div class='ellipsis-text'>
-                    <a class="text-link" href="${item.url}" target="_blank">${item.note}</a>
+                    <a class="text-link" href="${item.url}" data-url="${item.url}" data-index="${index}">${item.note}</a>
                 </div>
             </li>
             <img 
@@ -298,9 +314,22 @@ function render(){
                 class="delete-btn drop-shadow" 
                 data-remove="${index}">
         </div>
-        `
-    })
-    linksList.innerHTML = listHtml
+        `;
+    });
+
+    linksList.innerHTML = listHtml;
+
+    document.querySelectorAll('.text-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const url = e.target.getAttribute('data-url');
+            if (isTabEmpty) {
+                chrome.tabs.update({ url });
+            } else {
+                window.open(url, '_blank');
+            }
+        });
+    });
 }
 
 noteInput.focus()
